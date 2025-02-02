@@ -33,7 +33,7 @@ always @(posedge pclk)
    end
 always @(posedge pclk)
 begin
-    if((cs == IDLE || cs == ACCESS) && valid && pready )
+	if((cs == IDLE || (cs == ACCESS && pready)) && valid  )
            begin
                paddr <= trf_addr;
                pwdata <= trf_wdata;
