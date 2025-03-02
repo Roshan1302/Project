@@ -1,19 +1,20 @@
 `timescale 1ns / 1ps
 
-module TB_async_fifo();
-       parameter fd =8,fw =8,add_size =3;
+module tb_async_fifo();
+      
        reg w_clk;
        reg r_clk;
-       reg rst ,wr ,rd;
-       reg [fw-1:0]wdata ;
+       reg r_rst ,w_rst ,wr ,rd;
+       reg [7:0]wdata ;
        
-       wire[fw-1:0]rdata;
+       wire[7:0]rdata;
        wire full,empty;
        wire  overflow ,underflow; 
        integer i ;
        async_fifo DUT (.w_clk(w_clk),
        .r_clk(r_clk),
-       .rst(rst) ,
+       .rst(w_rst) ,
+       .rst(r_rst) ,
        .wr(wr) ,
        .rd(rd),
        .wdata(wdata),
@@ -23,8 +24,8 @@ module TB_async_fifo();
        .overflow(overflow),
        .underflow(underflow)
        );
-       always #5 r_clk = ~ r_clk ;
-       always #7 w_clk = ~ w_clk ;
+       always #7 r_clk = ~ r_clk ;
+       always #5 w_clk = ~ w_clk ;
        initial 
         begin 
          r_clk = 1;
@@ -32,10 +33,10 @@ module TB_async_fifo();
          {wr,rd,rst} = 3'b001;
          #23
          {wr,rd,rst} = 3'b100;
-         for (i = 0 ; i < fd ; i = i + 1)
+         for (i = 0 ; i < 8 ; i = i + 1)
             begin
                 wdata = i;
-                #14;
+                #10;
             end
             #14
             {wr,rd,rst} = 3'b010;
