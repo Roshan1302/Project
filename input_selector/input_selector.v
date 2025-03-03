@@ -12,29 +12,29 @@ reg [2:0]cnt;
 reg out_en;
 integer i;
 always @*
-begin 
-for (i = 0;i<4'b100;i=i+1)  // seperating output in 32-bit 
 	begin 
-		in[i] = inp[width-i*32-1-:32];
-  end 
-end 
-	always @(posedge clk )
+     	  for (i = 0;i<4'b100;i=i+1)  // seperating output in 32-bit 
+	    begin 
+              in[i] = inp[width-i*32-1-:32];
+            end 
+         end 
+always @(posedge clk )
   	begin
-			if (rst )
-				begin 
-					cnt <= 3'b000;
-					out <= 32'b0;
-					out_en <= 1'b0;
-				end 
-		  else
-   		  begin 
-          if(cnt > 3'b000) 
-              begin 
-                cnt <= cnt - 1;	
-                out_en <= 1'b1;
-              end 
-          else 
-             begin 
+	  if (rst )
+	     begin 
+	       cnt <= 3'b000;
+	   	out <= 32'b0;
+		out_en <= 1'b0;
+	      end 
+           else
+   	      begin 
+                 if(cnt > 3'b000) 
+                   begin 
+                     cnt <= cnt - 1;	
+                     out_en <= 1'b1;
+                    end 
+                else 
+                  begin 
                    if(valid[sel])
                      begin 
                        cnt <= cnt_in ;
